@@ -6,7 +6,8 @@
       flake-utils.url = "github:numtide/flake-utils";
       nix-ros-overlay= {
           url = "github:lopsided98/nix-ros-overlay";
-        };
+      };
+      rust-overlay.url = "github:oxalica/rust-overlay";
     };
 
   outputs = { nixpkgs, flake-utils,  ...}@inputs:
@@ -15,14 +16,21 @@
     eachSystem allSystems (system: let
       pkgs = import nixpkgs {
         inherit system;
-        overlays = [ inputs.nix-ros-overlay.overlays.default ];
+        overlays = with inputs; [ 
+          nix-ros-overlay.overlays.default
+          rust-overlay.overlays.default
+        ];
       };
       in {
         legacyPackages = pkgs.rosPackages;
 
         devShells = {
-          example-noetic = import ./ros/noetic.nix { inherit pkgs; };
-          example-ros2-basic = import ./ros/ros2-basic.nix { inherit pkgs; };
+          rust = import ./env/rust.nix { inherit pkgs; };
+
+          ros-noetic = import ./env/ros/noetic.nix { inherit pkgs; };
+          ros-melodic = import ./env/ros/noetic.nix { inherit pkgs; };
+          ros-humble = import ./env/ros/humble.nix { inherit pkgs; };
+          ros-rolling = import ./env/ros/rolling.nix { inherit pkgs; };
         };
       });
 

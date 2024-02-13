@@ -12,10 +12,6 @@ mkShell {
     glibcLocales
     (buildEnv { paths = [
       rosbash
-      turtlebot3-description
-      turtlebot3-teleop
-      # turtlebot3-gazebo
-      # gazebo-plugins
       rviz
       xacro
     ]; })
@@ -23,5 +19,4 @@ mkShell {
 
   ROS_HOSTNAME = "localhost";
   ROS_MASTER_URI = "http://localhost:11311";
-  TURTLEBOT3_MODEL = "burger";
 }
